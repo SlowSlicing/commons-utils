@@ -27,6 +27,8 @@ import com.lynchj.exception.LynchjException;
 
 /**
  * 关于操作Excel文件的导出和导入
+ * 	使用此工具类操作的实体类要在实体类属性上方加入
+ * 		@PropertiesName(name = "xxx"); xxx: Excel的表头
  * 
  * @author 大漠知秋
  * 
