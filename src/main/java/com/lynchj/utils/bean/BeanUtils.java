@@ -47,7 +47,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
 	 * 	主要用于VO和Entity之间进行转换
 	 *  不拷贝原属性为Null的属性
 	 * 
-	 * @param target 目标对象
+	 * @param clazzTarget 目标对象
 	 * @param source 原对象
 	 * @return Copy完毕的目标对象
 	 * @throws IllegalAccessException 
@@ -82,7 +82,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
 	 * 	主要用于VO和Entity之间进行转换
 	 *  拷贝原属性为Null的属性
 	 * 
-	 * @param target 目标对象
+	 * @param clazzTarget 目标对象
 	 * @param source 原对象
 	 * @return Copy完毕的目标对象
 	 * @throws IllegalAccessException 

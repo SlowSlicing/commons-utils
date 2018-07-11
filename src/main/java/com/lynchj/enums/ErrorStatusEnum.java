@@ -14,7 +14,6 @@ public enum ErrorStatusEnum implements BaseEnum {
 	NULL_VALUE_ERROR(1003, "空值错误"),
 	NO_PROPERTIES_NAME_ANNOTATION_ERROR(1004, "传入的类属性中没有加入@PropertiesName注解"),
 	EXCEL_LAYOUT_ERROR(1005, "只支持'.xls'和'.xlsx'格式的Excel文档"),
-	EXCEPTION_DETIAL_INFO_ERROR(1006, "处理异常详细信息出错"),
 	;
 	
 	private Integer code;

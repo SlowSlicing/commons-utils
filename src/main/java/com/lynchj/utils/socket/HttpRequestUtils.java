@@ -1,5 +1,6 @@
 package com.lynchj.utils.socket;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,6 +53,7 @@ import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -102,6 +104,9 @@ public class HttpRequestUtils {
     
     /** 是否绕过证书 */
     private static final Boolean ROUND_CER = true;
+
+    /** json 格式 */
+    private static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
 
     /**
      * 初始化连接池管理器,配置SSL
@@ -374,6 +379,40 @@ public class HttpRequestUtils {
     }
 
     /**
+     * post请求 请求体方式,支持SSL
+     *
+     * @param url 请求地址
+     * @param headers 请求头信息
+     * @param params 请求参数
+     * @param timeOut 超时时间(毫秒):从连接池获取连接的时间,请求时间,响应时间
+     * @param isStream 是否以流的方式获取响应信息
+     * @param clientContext Http请求客户端上下文对象，包含Cookie
+     * @return 响应信息
+     * @throws UnsupportedEncodingException
+     */
+    public static String httpPostByRequestBody(String url, Map<String, Object> headers, Map<String, Object> params, Integer timeOut, boolean isStream, HttpClientContext clientContext) throws UnsupportedEncodingException {
+
+        // 创建post请求
+        HttpPost httpPost = new HttpPost(url);
+
+        // 添加请求头信息
+        if (null != headers) {
+            for (Map.Entry<String, Object> entry : headers.entrySet()) {
+                httpPost.addHeader(entry.getKey(), entry.getValue().toString());
+            }
+        }
+
+        // 添加请求体信息
+        StringEntity stringEntity = new StringEntity(JSONObject.toJSONString(params), CONTENT_TYPE_APPLICATION_JSON);
+        stringEntity.setContentEncoding(ENCODING);
+        stringEntity.setContentType(CONTENT_TYPE_APPLICATION_JSON);
+        httpPost.setEntity(stringEntity);
+
+        return getResult(httpPost, timeOut, isStream, clientContext);
+
+    }
+
+    /**
      * get请求,支持SSL
      * 
      * @param url 请求地址
@@ -395,7 +434,7 @@ public class HttpRequestUtils {
         }
 
         // 创建post请求
-        HttpGet httpGet = new HttpGet(url);
+        HttpGet httpGet = new HttpGet(uriBuilder.build());
 
         // 添加请求头信息
         if (null != headers) {
@@ -428,7 +467,7 @@ public class HttpRequestUtils {
         }
 
         // 创建post请求
-        HttpGet httpGet = new HttpGet(url);
+        HttpGet httpGet = new HttpGet(uriBuilder.build());
 
         return getResult(httpGet, timeOut, true, clientContext);
 
@@ -456,7 +495,7 @@ public class HttpRequestUtils {
         }
 
         // 创建post请求
-        HttpGet httpGet = new HttpGet(url);
+        HttpGet httpGet = new HttpGet(uriBuilder.build());
 
         // 添加请求头信息
         if (null != headers) {
@@ -489,11 +528,13 @@ public class HttpRequestUtils {
         }
 
         // 创建post请求
-        HttpGet httpGet = new HttpGet(url);
+        HttpGet httpGet = new HttpGet(uriBuilder.build());
 
         return getResult(httpGet, timeOut, true, clientContext);
 
     }
+
+
 
     private static String getResult(HttpRequestBase httpRequest, Integer timeOut, boolean isStream, HttpClientContext clientContext) {
 
